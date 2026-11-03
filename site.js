@@ -2,7 +2,6 @@
    Aling Nena's Kainan - shared site script
    1) Edit the SITE_CONFIG block below (the ONLY place you need to edit)
    2) Wires up Messenger / Facebook / Viber / Maps links on every page
-   3) Carries the Menu page tray over to the Order page
    ===================================================================== */
 
 /* ============================ EDIT THIS ============================ */
@@ -21,8 +20,6 @@ var SITE_CONFIG = {
 (function () {
   "use strict";
 
-  var TRAY_KEY = "alingNena.tray";
-
   function isSet(v) {
     return typeof v === "string" && v.trim() !== "" && v.indexOf("YOUR_") === -1;
   }
@@ -32,10 +29,7 @@ var SITE_CONFIG = {
     : "";
 
   // Used by the order form on order.html
-  window.SITE = {
-    messengerUrl: function () { return messengerUrl; },
-    trayKey: TRAY_KEY
-  };
+  window.SITE = { messengerUrl: function () { return messengerUrl; } };
 
   /* ---------- 1) Link wiring ---------- */
   var targets = {
@@ -56,7 +50,7 @@ var SITE_CONFIG = {
       ["index", "index.html", "Home", "home"],
       ["menu", "menu.html", "Menu", "restaurant_menu"],
       ["about", "about.html", "About & Kwento", "info"],
-      ["order", "order.html", "Contact & Order", "shopping_bag"]
+      ["contact", "contact.html", "Contact & Bisita", "location_on"]
     ];
 
     var links = items.map(function (it) {
@@ -91,8 +85,8 @@ var SITE_CONFIG = {
       '<div class="p-space-md border-t border-outline-variant flex flex-col gap-space-sm shrink-0" style="padding-bottom:max(1rem, env(safe-area-inset-bottom))">' +
         '<div class="inline-flex items-center justify-center gap-space-xs self-start bg-tertiary-fixed text-on-tertiary-fixed px-space-md py-space-xs rounded-full font-label-sm text-label-sm">' +
           '<span class="inline-block w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>Bukas Ngayon (6:00 AM - 8:00 PM)</div>' +
-        '<a href="order.html" data-link="messenger" class="flex items-center justify-center gap-space-sm bg-primary text-on-primary font-label-lg text-label-lg min-h-[52px] rounded-xl shadow-md hover:bg-primary-container transition-colors">' +
-          '<span class="material-symbols-outlined">forum</span>Order sa Messenger</a>' +
+        '<a href="contact.html" data-link="messenger" class="flex items-center justify-center gap-space-sm bg-primary text-on-primary font-label-lg text-label-lg min-h-[52px] rounded-xl shadow-md hover:bg-primary-container transition-colors">' +
+          '<span class="material-symbols-outlined">forum</span>Mag-message sa Messenger</a>' +
         '<a href="tel:09178234567" class="flex items-center justify-center gap-space-sm bg-surface-container-lowest text-on-surface font-label-lg text-label-lg min-h-[48px] rounded-xl border-2 border-secondary-container">' +
           '<span class="material-symbols-outlined text-primary">call</span>(0917) 823-4567</a>' +
       "</div>";
@@ -161,55 +155,4 @@ var SITE_CONFIG = {
   } else {
     onReady();
   }
-
-  /* ---------- 2) Carry the menu tray over to the order form ---------- */
-  var list = document.getElementById("dishList");
-  if (!list) return;
-
-  var saved = [];
-  try { saved = JSON.parse(localStorage.getItem(TRAY_KEY) || "[]"); } catch (e) { saved = []; }
-  if (!Array.isArray(saved) || saved.length === 0) return;
-
-  var rows = Array.prototype.slice.call(list.querySelectorAll(".dish-item"));
-  if (rows.length === 0) return;
-  var pristine = rows[0].cloneNode(true); // untouched copy used as template
-  var fresh = document.createDocumentFragment();
-
-  function markSelected(row, qty) {
-    row.querySelector(".dish-check").checked = true;
-    row.querySelector(".qty-val").textContent = String(qty);
-    row.querySelectorAll(".qty-btn").forEach(function (b) { b.removeAttribute("disabled"); });
-    row.classList.remove("bg-surface-container-low");
-    row.classList.add("bg-surface-container-highest");
-  }
-
-  saved.forEach(function (item, idx) {
-    var name = String(item && item.name || "").trim();
-    var price = Number(item && item.price);
-    var qty = Math.max(1, parseInt(item && item.qty, 10) || 1);
-    if (!name || !isFinite(price)) return;
-
-    var row = rows.filter(function (r) {
-      return (r.dataset.name || "").toLowerCase() === name.toLowerCase();
-    })[0];
-
-    if (!row) {
-      row = pristine.cloneNode(true);
-      row.dataset.name = name;
-      row.dataset.price = String(price);
-      var cb = row.querySelector(".dish-check");
-      var id = "dish-menu-" + idx;
-      cb.id = id;
-      cb.checked = false;
-      var label = row.querySelector("label");
-      label.setAttribute("for", id);
-      label.textContent = name;
-      label.title = name;
-      row.querySelector("span.text-secondary").textContent = "\u20B1" + price.toFixed(2);
-      fresh.appendChild(row);
-    }
-    markSelected(row, qty);
-  });
-
-  list.insertBefore(fresh, list.firstChild);
 })();
