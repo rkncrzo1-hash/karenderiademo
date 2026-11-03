@@ -1,6 +1,6 @@
-# Aling Nena's Kainan - Website
+# Aling Nena's Kainan - Brochure Website
 
-Static website (no build step): `index.html`, `menu.html`, `about.html`, `order.html`, plus `site.js`.
+Static website (no build step): `index.html`, `menu.html`, `about.html`, `contact.html`, plus `site.js`.
 Works on GitHub Pages as-is. It needs an internet connection because Tailwind, fonts, icons and
 the current photos load from the web.
 
@@ -14,7 +14,7 @@ the current photos load from the web.
 | `viberUrl` | Viber community invite link (or leave empty) |
 | `mapsUrl` | Google Maps "Share" link of the real location |
 
-Until `messengerUsername` is set, the order form still builds and copies the order, but cannot open Messenger.
+Until `messengerUsername` is set, the Messenger buttons just open the Contact page.
 
 ### b) Find & replace text (VS Code: Ctrl+Shift+H, search in all files)
 The design uses sample details from Quezon City. Replace:
@@ -25,8 +25,6 @@ The design uses sample details from Quezon City. Replace:
 | `Quezon City` and `Metro Manila` | `Aguilar, Pangasinan` |
 | `(0917) 823-4567` | real number, display format |
 | `09178234567` (appears in `tel:` links) | real number, digits only |
-| `0917-823-4567` (GCash number) | the real GCash number |
-| `Brgy. Central, Diliman, Teachers Village, UP Campus, Kamias, Scout Area` (delivery areas on order.html) | real barangays served |
 
 ### c) Replace sample content
 - **Photos:** all food and Aling Nena images are placeholder AI images loaded from temporary links.
@@ -35,10 +33,7 @@ The design uses sample details from Quezon City. Replace:
   Swap them for a Google Maps embed or a screenshot of the real location.
 - **Claims:** ratings (4.9/5), "50k+ Masayang Suki", testimonials, "Verified GCash Merchant",
   "14+ years" and the story on about.html are sample text. Only keep what the owner confirms.
-- **Menu and prices:** menu.html is the source of truth; keep order.html and index.html in sync.
-  The order page also has its own short list (Ginisang Monggo, Extra Rice, P99 meal).
-- **Free delivery:** index.html says "free delivery min P500" but the order form always adds the
-  delivery fee. Confirm the rule with the owner.
+- **Menu and prices:** menu.html is the source of truth; keep the dish prices on index.html in sync.
 
 ## 2. Publish on GitHub Pages
 1. Create a new repository on GitHub (e.g. `alingnenas-kainan`).
@@ -48,15 +43,12 @@ The design uses sample details from Quezon City. Replace:
 4. After about a minute the site is live at `https://<username>.github.io/<repo>/`.
 
 ## 3. How it works
-- **Navigation:** all pages link to each other with relative links, so it works in a subfolder URL.
-- **Tray:** items added on the menu are saved in the browser (`localStorage`) and pre-selected on the order page.
-- **Order:** "I-send ang Order" shows the order summary. The customer taps "I-copy at Buksan ang Messenger",
-  the text is copied, and Messenger opens to paste it. (Messenger does not reliably accept pre-filled text from links.)
+- **Pages:** Home, Menu (display only), About & Kwento, Contact & Bisita (location, hours, phone, Messenger).
+- **Navigation:** relative links; on phones a hamburger button opens a drawer from the right (built in `site.js`).
+- There is no ordering system. Customers call, message on Messenger, or visit.
 
 ## 4. Quick test checklist
 - [ ] Click every nav link on all 4 pages
-- [ ] Menu: add 2 dishes, reload (tray stays), tap Checkout, dishes are ticked on the order page
-- [ ] Order: fill name and contact, submit, copy works, Messenger opens the right page
 - [ ] Check on a phone (Chrome DevTools -> device toolbar)
 - [ ] Facebook, Viber, Maps and phone links go to the real places
 
@@ -64,3 +56,4 @@ The design uses sample details from Quezon City. Replace:
 - Replace the Tailwind CDN script with a compiled CSS file (faster, no console warning).
 - Add real photos and compress them (WebP, under 200 KB each).
 - Add your own domain in Settings -> Pages (about P700-P1,000 per year).
+- 
