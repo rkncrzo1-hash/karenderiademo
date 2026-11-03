@@ -1,5 +1,5 @@
 /* =====================================================================
-   Aling Nena's Kainan - shared site script
+   chEATday - shared site script
    1) Edit the SITE_CONFIG block below (the ONLY place you need to edit)
    2) Wires up Messenger / Facebook / Viber / Maps links on every page
    ===================================================================== */
@@ -77,7 +77,7 @@ var SITE_CONFIG = {
     drawer.setAttribute("inert", "");
     drawer.innerHTML =
       '<div class="flex items-center justify-between h-20 px-space-md border-b border-outline-variant shrink-0">' +
-        '<span class="font-headline-sm text-headline-sm text-on-surface">Aling Nena\u2019s Kainan</span>' +
+        '<span class="flex items-center gap-space-sm font-headline-sm text-headline-sm text-on-surface"><img src="images/logo.png" alt="" class="h-10 w-auto"/>chEATday</span>' +
         '<button id="navClose" type="button" class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors" aria-label="Isara ang menu">' +
           '<span class="material-symbols-outlined">close</span></button>' +
       "</div>" +
